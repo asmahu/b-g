@@ -124,7 +124,6 @@ def scores_dashboard(board):
     print("-" * 35)
     print("After this round, the scores are:")
     print(f"{board.name}: {scores['player']} CPU: {scores['CPU']}")
-    ################################################### MOMKIN QLALAT
     print("-" * 35)
 
 
@@ -206,6 +205,13 @@ def new_game():
     """
 
     print()
+    print(
+        """
+___  ____ ___ ___ _    ____ ____ _  _ _ ___  ____
+|__] |__|  |   |  |    |___ [__  |__| | |__] [__
+|__] |  |  |   |  |___ |___ ___] |  | | |    ___]\n
+"""
+    )
     print("The board size must be integers between 3 and 10\n")
 
     # Get the size of board from the player and validate it
@@ -236,10 +242,10 @@ def new_game():
     scores["CPU"] = 0
     scores["player"] = 0
     print("-" * 37)
-    print("Welcome to the ULTIMATE BATTLESHIPS!!")
+    print("WELCOME TO THE ULTIMATE BATTLESHIPS!!")
     print("You will be playing against CPU")
-    print("In this battleship game player's take turns guessing by calling 
-    out the coordiantes. The opponent responds with "hit" or "miss"/n")
+    print("In this battleship game player's take turns guessing by calling \
+     out the coordiantes. The opponent responds with hit or miss/n")
     print(f"Board Size: {size}. Number of Ships: {number_ships}")
     print("Top left corner is row: 0, col: 0")
     print("-" * 37)
