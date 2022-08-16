@@ -1,7 +1,7 @@
 from random import randint
 import sys
 
-scores = {'computer': 0, 'player': 0}
+scores = {'CPU': 0, 'player': 0}
 
 
 # Board class adopted and modified from the CI's battleship tutorial
@@ -9,7 +9,7 @@ class Board:
 
     """
     Main board class. Sets board size, the number of ships,
-     the player's name and the board type (player board or computer).
+     the player's name and the board type (player board or CPU).
      Has methods for adding ships and guesses and printing the board
     """
 
@@ -38,7 +38,7 @@ class Board:
         else:
             return "Miss"
 
-    def add_ship(self, x, y, type="computer"):
+    def add_ship(self, x, y, type="CPU"):
         if len(self.ships) >= self.num_ships:
             print("Error: you cannot add any more ships!")
         else:
@@ -99,7 +99,7 @@ def make_guess(board):
     """
 
     while True:
-        if board.type == "computer":
+        if board.type == "CPU":
             x, y = random_point(board.size), random_point(board.size)
             if validate_coordinates(x, y, board):
                 board.guesses.append((x, y))
@@ -123,25 +123,25 @@ def scores_dashboard(board):
 
     print("-" * 35)
     print("After this round, the scores are:")
-    print(f"{board.name}: {scores['player']} Computer: {scores['computer']}")
+    print(f"{board.name}: {scores['player']} CPU: {scores['CPU']}")
     print("-" * 35)
 
 
-def print_board(computer_board, player_board):
+def print_board(CPU_board, player_board):
 
     """
-    Prints the player's board and the computer's board
+    Prints the player's board and the CPU's board
     """
 
     print(f"{player_board.name}'s Board:")
     player_board.print()
     print()
-    print("Computer's Board:")
-    computer_board.print()
+    print("CPU's Board:")
+    CPU_board.print()
     print("-" * 35)
 
 
-def check_winner(scores, computer_board, player_board):
+def check_winner(scores, CPU_board, player_board):
 
     """
     Function that checks the winner and displays the winning message
@@ -150,42 +150,42 @@ def check_winner(scores, computer_board, player_board):
     if scores["player"] == player_board.num_ships:
         print("GAME OVER!!")
         print(f"Well done {player_board.name}!! You are the Victor")
-    elif scores['computer'] == player_board.num_ships:
+    elif scores['CPU'] == player_board.num_ships:
         print("GAME OVER!!")
-        print(f"Sorry, {player_board.name}!! You lost to the computer")
+        print(f"Sorry, {player_board.name}!! You lost to the CPU")
 
 
-def play_game(computer_board, player_board):
+def play_game(CPU_board, player_board):
 
     """
     Main game function. Takes in the board instances as arguement
     and controls the game logic"""
 
     while True:
-        # Get the player's guess and populate computer's board
+        # Get the player's guess and populate CPU's board
         x, y = make_guess(player_board)
         x, y = int(x), int(y)
         player_board.guesses.append((x, y))
         print(f"Player guessed: {x, y}")
-        if computer_board.guess(x, y) == "Hit":
+        if CPU_board.guess(x, y) == "Hit":
             print("Player got a hit!")
             scores['player'] += 1
-        elif computer_board.guess(x, y) == "Miss":
+        elif CPU_board.guess(x, y) == "Miss":
             print("Player missed this time")
 
-        # Get computer's guess and populate player's board
-        x, y = make_guess(computer_board)
-        computer_board.guesses.append((x, y))
-        print(f"Computer guessed: {x, y}")
+        # Get CPU's guess and populate player's board
+        x, y = make_guess(CPU_board)
+        CPU_board.guesses.append((x, y))
+        print(f"CPU guessed: {x, y}")
         if player_board.guess(int(x), int(y)) == "Hit":
-            print("Computer got a hit!")
-            scores["computer"] += 1
+            print("CPU got a hit!")
+            scores["CPU"] += 1
         elif player_board.guess(x, y) == "Miss":
-            print("Computer missed this time")
+            print("CPU missed this time")
 
         scores_dashboard(player_board)
-        print_board(computer_board, player_board)
-        check_winner(scores, computer_board, player_board)
+        print_board(CPU_board, player_board)
+        check_winner(scores, CPU_board, player_board)
 
         # Get user's feedback to continue or to quit
         player_choice = input("Enter 'e' to quit, 'n' for new game and \
@@ -232,7 +232,7 @@ def new_game():
         else:
             print("Out of bound: choose an integer between 3 and 10\n")
 
-    scores["computer"] = 0
+    scores["CPU"] = 0
     scores["player"] = 0
     print("-" * 37)
     print("Welcome to the ULTIMATE BATTLESHIPS!!")
@@ -250,16 +250,16 @@ def new_game():
             print("Invalid entry: players name must be an alphabet")
 
     # Get board instances
-    computer_board = Board(size, num_ships, "Computer", type="computer")
+    CPU_board = Board(size, num_ships, "CPU", type="CPU")
     player_board = Board(size, num_ships, player_name, type="player")
 
     # Append ships to the board instances
     for _ in range(num_ships):
         populate_board(player_board)
-        populate_board(computer_board)
+        populate_board(CPU_board)
     print("-" * 35)
-    print_board(computer_board, player_board)
-    play_game(computer_board, player_board)
+    print_board(CPU_board, player_board)
+    play_game(CPU_board, player_board)
 
 
 new_game()
