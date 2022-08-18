@@ -8,15 +8,15 @@ scores = {'CPU': 0, 'player': 0}
 class Board:
 
     """
-    Main board class. Sets board size, the number of ships,
-     the player's name and the board type (player board or CPU).
-     Has methods for adding ships and guesses and printing the board
+    Main board class. to set board size, the number of ships,
+     the player's name and the player board or CPU
+     contains methods to add ships, guesses and to print the board
     """
 
-    def __init__(self, size, num_ships, name, type):
+    def __init__(self, size, number_ships, name, type):
         self.size = size
-        self.board = [["." for x in range(size)] for y in range(size)]
-        self.num_ships = num_ships
+        self.board = [["." for a in range(size)] for b in range(size)]
+        self.number_ships = number_ships
         self.name = name
         self.type = type
         self.guesses = []
@@ -27,24 +27,24 @@ class Board:
         for row in self.board:
             print("  ".join(row))
 
-    def guess(self, x, y):
-        # appends "X" at the chosen coordinates
-        self.board[x][y] = "X"
+    def guess(self, a, b):
+        # adds "a" at the selected coordinates
+        self.board[a][b] = "a"
 
-        # appends "*" if chosen coordinates hits a target
-        if (x, y) in self.ships:
-            self.board[x][y] = "*"
+        # adds "*" if selected coordinates hits a target
+        if (a, b) in self.ships:
+            self.board[a][b] = "*"
             return "Hit"
         else:
             return "Miss"
 
-    def add_ship(self, x, y, type="CPU"):
-        if len(self.ships) >= self.num_ships:
+    def add_ship(self, a, b, type="CPU"):
+        if len(self.ships) >= self.number_ships:
             print("Error: you cannot add any more ships!")
         else:
-            self.ships.append((x, y))
+            self.ships.append((a, b))
             if self.type == "player":
-                self.board[x][y] = "@"
+                self.board[a][b] = "@"
 
 
 def random_point(size):
@@ -55,28 +55,28 @@ def random_point(size):
     return randint(0, size - 1)
 
 
-def validate_coordinates(x, y, board):
+def validate_coordinates(a, b, board):
 
     """
     Function to validate coordinate inputs from users
     """
 
     try:
-        x, y = int(x), int(y)
-        board.board[x][y] in board.board
+        a, b = int(a), int(b)
+        board.board[a][b] in board.board
 
     except IndexError:
-        print(f"Invalid data: row and column\
+        print(f"Invalid input: row and column\
 must be an integer between 0 - {board.size - 1}\n")
         return False
 
     except ValueError:
-        print(f"Invalid data: sorry, you can only enter integer numbers.\n")
+        print(f"Invalid input: sorry, only integer numbers are allowed.\n")
         return False
 
     finally:
-        if (x, y) in board.guesses:
-            print("You cannot guess the same coordinates twice!\n")
+        if (a, b) in board.guesses:
+            print("Boat does not fit. please input different coordinates!!!\n")
             return False
     return True
 
@@ -87,35 +87,35 @@ def populate_board(board):
     Function to add ships to the board's ships list
     """
 
-    x = random_point(board.size)
-    y = random_point(board.size)
-    board.add_ship(x, y)
+    a = random_point(board.size)
+    b = random_point(board.size)
+    board.add_ship(a, b)
 
 
 def make_guess(board):
 
     """
-    Function to get validated user guess and append it to the guesses list
+    Function to get validated player guess and add it to the guesses list
     """
 
     while True:
         if board.type == "CPU":
-            x, y = random_point(board.size), random_point(board.size)
-            if validate_coordinates(x, y, board):
-                board.guesses.append((x, y))
-                return x, y
+            a, b = random_point(board.size), random_point(board.size)
+            if validate_coordinates(a, b, board):
+                board.guesses.append((a, b))
+                return a, b
                 break
 
         elif board.type == "player":
-            x = input("Guess a row: ")
-            y = input("Guess a column: ")
-            if validate_coordinates(x, y, board):
-                board.guesses.append((x, y))
-                return x, y
+            a = input("Guess a row: ")
+            b = input("Guess a column: ")
+            if validate_coordinates(a, b, board):
+                board.guesses.append((a, b))
+                return a, b
                 break
 
 
-def scores_dashboard(board):
+def scores_Area(board):
 
     """
     Prints the score dashboard status after each round
@@ -141,16 +141,16 @@ def print_board(CPU_board, player_board):
     print("-" * 35)
 
 
-def check_winner(scores, CPU_board, player_board):
+def winner(scores, CPU_board, player_board):
 
     """
-    Function that checks the winner and displays the winning message
+    function to check who wins and display the result message
     """
 
-    if scores["player"] == player_board.num_ships:
+    if scores["player"] == player_board.number_ships:
         print("GAME OVER!!")
-        print(f"Well done {player_board.name}!! You are the Victor")
-    elif scores['CPU'] == player_board.num_ships:
+        print(f"Well done {player_board.name}!! You are the winner")
+    elif scores['CPU'] == player_board.number_ships:
         print("GAME OVER!!")
         print(f"Sorry, {player_board.name}!! You lost to the CPU")
 
@@ -158,42 +158,42 @@ def check_winner(scores, CPU_board, player_board):
 def play_game(CPU_board, player_board):
 
     """
-    Main game function. Takes in the board instances as arguement
-    and controls the game logic"""
+    Function to start playing game 
+    """
 
     while True:
         # Get the player's guess and populate CPU's board
-        x, y = make_guess(player_board)
-        x, y = int(x), int(y)
-        player_board.guesses.append((x, y))
-        print(f"Player guessed: {x, y}")
-        if CPU_board.guess(x, y) == "Hit":
+        a, b = make_guess(player_board)
+        a, b = int(a), int(b)
+        player_board.guesses.append((a, b))
+        print(f"Player guessed: {a, b}")
+        if CPU_board.guess(a, b) == "Hit":
             print("Player got a hit!")
             scores['player'] += 1
-        elif CPU_board.guess(x, y) == "Miss":
+        elif CPU_board.guess(a, b) == "Miss":
             print("Player missed this time")
 
-        # Get CPU's guess and populate player's board
-        x, y = make_guess(CPU_board)
-        CPU_board.guesses.append((x, y))
-        print(f"CPU guessed: {x, y}")
-        if player_board.guess(int(x), int(y)) == "Hit":
+        # Get CPU's guess and setup player's board
+        a, b = make_guess(CPU_board)
+        CPU_board.guesses.append((a, b))
+        print(f"CPU guessed: {a, b}")
+        if player_board.guess(int(a), int(b)) == "Hit":
             print("CPU got a hit!")
             scores["CPU"] += 1
-        elif player_board.guess(x, y) == "Miss":
+        elif player_board.guess(a, b) == "Miss":
             print("CPU missed this time")
 
-        scores_dashboard(player_board)
+        scores_Area(player_board)
         print_board(CPU_board, player_board)
-        check_winner(scores, CPU_board, player_board)
+        winner(scores, CPU_board, player_board)
 
         # Get user's feedback to continue or to quit
-        player_choice = input("Enter 'e' to quit, 'n' for new game and \
+        player_selection = input("Enter 'e' to quit, 'n' for new game and \
 any key to continue: ")
 
-        if player_choice.lower() == "n":
+        if player_selection.lower() == "n":
             new_game()
-        elif player_choice.lower() == "e":
+        elif player_selection.lower() == "e":
             sys.exit("You have quit the game")
 
 
@@ -210,13 +210,13 @@ def new_game():
     # Get the size of board from the player and validate it
     while True:
         try:
-            size = int(input("Choose the board size: "))
+            size = int(input("Select the board size: "))
             if size >= 3 and size <= 10:
                 break
         except ValueError:
             print("The board size must be an integer number\n")
         else:
-            print("Out of bound: choose an integer between 3 and 10\n")
+            print("Out of range: Select an integer between 3 and 10\n")
 
     print()
     print("The number of ships must be integers between 3 and 10\n")
@@ -224,19 +224,20 @@ def new_game():
     # Get the number of ships from the user and validate it
     while True:
         try:
-            num_ships = int(input("Choose the number of ships: "))
-            if num_ships >= 3 and num_ships <= 10:
+            number_ships = int(input("Seleect the number of ships: "))
+            if number_ships >= 3 and number_ships <= 10:
                 break
         except ValueError:
             print("The number of ships must be integer number\n")
         else:
-            print("Out of bound: choose an integer between 3 and 10\n")
+            print("Out of range: Select an integer between 3 and 10\n")
 
     scores["CPU"] = 0
     scores["player"] = 0
     print("-" * 37)
     print("Welcome to the ULTIMATE BATTLESHIPS!!")
-    print(f"Board Size: {size}. Number of Ships: {num_ships}")
+    print("You will be playing against CPU")
+    print(f"Board Size: {size}. Number of Ships: {number_ships}")
     print("Top left corner is row: 0, col: 0")
     print("-" * 37)
 
@@ -250,11 +251,11 @@ def new_game():
             print("Invalid entry: players name must be an alphabet")
 
     # Get board instances
-    CPU_board = Board(size, num_ships, "CPU", type="CPU")
-    player_board = Board(size, num_ships, player_name, type="player")
+    CPU_board = Board(size, number_ships, "CPU", type="CPU")
+    player_board = Board(size, number_ships, player_name, type="player")
 
-    # Append ships to the board instances
-    for _ in range(num_ships):
+    # Add ships to the board instances
+    for _ in range(number_ships):
         populate_board(player_board)
         populate_board(CPU_board)
     print("-" * 35)
