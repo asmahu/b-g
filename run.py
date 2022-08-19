@@ -1,3 +1,5 @@
+### THIS IS PART OF CODEINSTITUTE CODING CHALLANGE 
+### BATTLESHIP WITH PYTHON3 (PLAYER VS CPU)
 from random import randint
 import sys
 
@@ -81,7 +83,7 @@ must be an integer between 0 - {board.size - 1}\n")
     return True
 
 
-def populate_board(board):
+def setup_board(board):
 
     """
     Function to add ships to the board's ships list
@@ -121,10 +123,10 @@ def scores_Area(board):
     Prints the score dashboard status after each round
     """
 
-    print("-" * 35)
+    print("~" * 35)
     print("After this round, the scores are:")
     print(f"{board.name}: {scores['player']} CPU: {scores['CPU']}")
-    print("-" * 35)
+    print("~" * 35)
 
 
 def print_board(CPU_board, player_board):
@@ -138,7 +140,7 @@ def print_board(CPU_board, player_board):
     print()
     print("CPU's Board:")
     CPU_board.print()
-    print("-" * 35)
+    print("~" * 35)
 
 
 def winner(scores, CPU_board, player_board):
@@ -162,13 +164,13 @@ def play_game(CPU_board, player_board):
     """
 
     while True:
-        # Get the player's guess and populate CPU's board
+        # Get the player's guess and setup CPU's board
         a, b = make_guess(player_board)
         a, b = int(a), int(b)
         player_board.guesses.append((a, b))
         print(f"Player guessed: {a, b}")
         if CPU_board.guess(a, b) == "Hit":
-            print("Player got a hit!")
+            print("PLAYER HIT!")
             scores['player'] += 1
         elif CPU_board.guess(a, b) == "Miss":
             print("Player missed this time")
@@ -178,7 +180,7 @@ def play_game(CPU_board, player_board):
         CPU_board.guesses.append((a, b))
         print(f"CPU guessed: {a, b}")
         if player_board.guess(int(a), int(b)) == "Hit":
-            print("CPU got a hit!")
+            print("The CPU HIT!")
             scores["CPU"] += 1
         elif player_board.guess(a, b) == "Miss":
             print("CPU missed this time")
@@ -205,41 +207,54 @@ def new_game():
     """
 
     print()
-    print("The board size must be integers between 3 and 10\n")
+    print(
+        """
+___  ____ ___ ___ _    ____ ____ _  _ _ ___  ____
+|__] |__|  |   |  |    |___ [__  |__| | |__] [__
+|__] |  |  |   |  |___ |___ ___] |  | | |    ___]\n
+"""
+    )
+    print("WELCOME TO THIS ULTIMATE BATTLESHIP GAME!!!\n")
+    print("You are going to play against CPU\n")
+    print("Introduction:\n")
+    print("I. Input board size. it must be between 4 - 12\n")
+    print("II. Input number of ships between 4 - 12\n")
+    print("III. Input your name to dispay on screen only characters can be used\n")
+    print("IV. Guess a row and column to hit CPU's ships.\n")
+    print("GOOD LUCK!!!\n")
+    print("The board size must be integers between 4 and 12\n")
 
     # Get the size of board from the player and validate it
     while True:
         try:
             size = int(input("Select the board size: "))
-            if size >= 3 and size <= 10:
+            if size >= 4 and size <= 12:
                 break
         except ValueError:
             print("The board size must be an integer number\n")
         else:
-            print("Out of range: Select an integer between 3 and 10\n")
+            print("Out of range: Select an integer between 4 and 12\n")
 
     print()
-    print("The number of ships must be integers between 3 and 10\n")
+    print("The number of ships must be integers between 4 and 12\n")
 
     # Get the number of ships from the user and validate it
     while True:
         try:
             number_ships = int(input("Seleect the number of ships: "))
-            if number_ships >= 3 and number_ships <= 10:
+            if number_ships >= 4 and number_ships <= 12:
                 break
         except ValueError:
             print("The number of ships must be integer number\n")
         else:
-            print("Out of range: Select an integer between 3 and 10\n")
+            print("Out of range: Select an integer between 4 and 12\n")
 
     scores["CPU"] = 0
     scores["player"] = 0
-    print("-" * 37)
-    print("Welcome to the ULTIMATE BATTLESHIPS!!")
-    print("You will be playing against CPU")
+    print("~" * 37)
     print(f"Board Size: {size}. Number of Ships: {number_ships}")
     print("Top left corner is row: 0, col: 0")
-    print("-" * 37)
+    print("~" * 37)
 
     # Get the player's name
     while True:
@@ -256,9 +271,9 @@ def new_game():
 
     # Add ships to the board instances
     for _ in range(number_ships):
-        populate_board(player_board)
-        populate_board(CPU_board)
-    print("-" * 35)
+        setup_board(player_board)
+        setup_board(CPU_board)
+    print("~" * 35)
     print_board(CPU_board, player_board)
     play_game(CPU_board, player_board)
 
